@@ -1,7 +1,0 @@
-{
-  "name": "RuffBot COO Suite",
-  "description": "A comprehensive Virtual COO platform for RuffStuff Counseling PLLC, featuring administrative automation, SOP management, and AI-driven practice optimization.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
-}

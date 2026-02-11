@@ -7,7 +7,6 @@ import SOPVault from './components/SOPVault';
 import Tools from './components/Tools';
 import GrowthEngine from './components/GrowthEngine';
 import SchedulingOptimizer from './components/SchedulingOptimizer';
-import MobileSetup from './components/MobileSetup';
 import { Clock, Bell, Smartphone, X, ChevronRight, Share, Menu, Zap, ShieldCheck } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -53,8 +52,6 @@ const App: React.FC = () => {
         return <GrowthEngine />;
       case 'calendar':
         return <SchedulingOptimizer />;
-      case 'setup':
-        return <MobileSetup />;
       default:
         return <Dashboard setActiveTab={setActiveTab} />;
     }
@@ -79,35 +76,6 @@ const App: React.FC = () => {
       )}
       
       <main className={`flex-1 ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'} p-3 md:p-6 lg:p-6 min-h-screen relative w-full flex flex-col transition-all duration-300 animate-in fade-in-5 duration-1000`}>
-        {showInstallBanner && (
-          <div className="mb-4 bg-slate-900 text-white p-4 rounded-2xl shadow-xl flex flex-col sm:flex-row items-center justify-between animate-in slide-in-from-top-4 duration-500 border border-slate-800 gap-4">
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              <div className="bg-orange-500 p-2 rounded-xl flex-shrink-0">
-                <Zap className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="text-sm font-black leading-tight">
-                  Deploy as a Standalone Web App
-                </p>
-                <p className="text-[11px] text-slate-400 font-medium mt-0.5">
-                  Install RuffBot on your home screen to exit 'Web Preview' and enable a full-screen production experience.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-              <button 
-                onClick={() => setActiveTab('setup')}
-                className="bg-white text-slate-900 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm whitespace-nowrap"
-              >
-                Start Deployment <ChevronRight className="w-3 h-3" />
-              </button>
-              <button onClick={() => setShowInstallBanner(false)} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
-
         <header className="flex justify-between items-center mb-6 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm sticky top-3 z-30">
           <div className="flex items-center gap-3">
             <button 
@@ -121,18 +89,7 @@ const App: React.FC = () => {
               <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
             <div className="hidden sm:block h-4 w-px bg-slate-200" />
-            
-            <button 
-              onClick={() => setActiveTab('setup')}
-              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all hover:scale-105 active:scale-95 ${
-                isStandalone 
-                  ? 'bg-emerald-50 border-emerald-100 text-emerald-600 shadow-sm' 
-                  : 'bg-orange-50 border-orange-200 text-orange-600 animate-pulse'
-              }`}
-            >
-              {isStandalone ? <ShieldCheck className="w-2.5 h-2.5" /> : <Smartphone className="w-2.5 h-2.5" />}
-              {isStandalone ? 'Production Active' : 'Web Preview (Deploy Now)'}
-            </button>
+          
           </div>
           
           <div className="flex items-center gap-3">
