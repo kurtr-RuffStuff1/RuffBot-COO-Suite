@@ -28,17 +28,12 @@ const MetricCard = ({ title, value, change, icon: Icon, color }: any) => (
         {change >= 0 ? <ArrowUpRight className="w-3 h-3 mr-0.5" /> : <ArrowDownRight className="w-3 h-3 mr-0.5" />}
         {Math.abs(change)}%
       </div>
-<div>
-  <h3 className="text-slate-500 text-[11px] font-bold uppercase tracking-wider truncate">
-    {title}
-  </h3>
-
-  <p className="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">
-    {value}
-  </p>
-</div>
-
-</div>
+    </div>
+    <div>
+      <h3 className="text-slate-500 text-[11px] font-bold uppercase tracking-wider truncate">{title}</h3>
+      <p className="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">{value}</p>
+    </div>
+  </div>
 );
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({ setActiveTab }) => {
