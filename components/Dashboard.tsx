@@ -100,7 +100,9 @@ const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({ setActiv
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 min-w-0">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Efficiency Rating</h3>
-            <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md tracking-tighter">Target: >85%</span>
+            <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md tracking-tighter">
+  Target: &gt;85%
+</span>
           </div>
           <div className="h-64 w-full relative min-w-0">
             <ResponsiveContainer width="100%" height="100%" minHeight={0}>
