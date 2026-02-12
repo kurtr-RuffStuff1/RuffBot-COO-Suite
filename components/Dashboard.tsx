@@ -1,148 +1,242 @@
-
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { Users, CreditCard, TrendingUp, BookCheck, ArrowUpRight, ArrowDownRight, Zap, Smartphone, Info, ChevronRight, Share, AlertTriangle } from 'lucide-react';
-
-const data = [
-  { name: 'Mon', clients: 24, billing: 1200 },
-  { name: 'Tue', clients: 28, billing: 1400 },
-  { name: 'Wed', clients: 32, billing: 1600 },
-  { name: 'Thu', clients: 30, billing: 1500 },
-  { name: 'Fri', clients: 26, billing: 1300 },
-];
-
-const productivityData = [
-  { name: 'Wk 1', efficiency: 78 },
-  { name: 'Wk 2', efficiency: 82 },
-  { name: 'Wk 3', efficiency: 85 },
-  { name: 'Wk 4', efficiency: 91 },
-];
-
-const MetricCard = ({ title, value, change, icon: Icon, color }: any) => (
-  <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between min-w-0">
-    <div className="flex justify-between items-start mb-2">
-      <div className={`p-2.5 rounded-xl ${color} bg-opacity-10`}>
-        <Icon className={`w-5 h-5 ${color.replace('bg-', 'text-')}`} />
-      </div>
-      <div className={`flex items-center text-[10px] font-black uppercase tracking-tight ${change >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
-        {change >= 0 ? <ArrowUpRight className="w-3 h-3 mr-0.5" /> : <ArrowDownRight className="w-3 h-3 mr-0.5" />}
-        {Math.abs(change)}%
-      </div>
-    </div>
-    <div>
-      <h3 className="text-slate-500 text-[11px] font-bold uppercase tracking-wider truncate">{title}</h3>
-      <p className="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">{value}</p>
-    </div>
-  </div>
-);
+import {
+  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  XAxis, YAxis, Tooltip, ResponsiveContainer
+} from 'recharts';
+import {
+  TrendingUp, Users, Calendar, AlertTriangle, DollarSign
+} from 'lucide-react';
 
 const Dashboard: React.FC<{ setActiveTab: (tab: string) => void }> = ({ setActiveTab }) => {
-  const isStandalone = (window.navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+  // -----------------------------
+  // 1. WEEKLY REVENUE PROJECTION
+  // -----------------------------
+  const weeklyRevenue = [
+    { platform: 'Thriveworks', amount: 820 },
+    { platform: 'Headway', amount: 540 },
+    { platform: 'Rula', amount: 310 },
+    { platform: 'BetterHelp', amount: 180 },
+    { platform: 'Private Pay', amount: 450 },
+  ];
+  const totalWeeklyRevenue = weeklyRevenue.reduce((sum, p) => sum + p.amount, 0);
+
+  // -----------------------------
+  // 2. PLATFORM MIX PIE CHART
+  // -----------------------------
+  const platformMix = [
+    { name: 'Thriveworks', value: 42 },
+    { name: 'Headway', value: 28 },
+    { name: 'Rula', value: 18 },
+    { name: 'BetterHelp', value: 12 },
+    { name: 'Private Pay', value: 14 },
+  ];
+  const COLORS = ['#f97316', '#0ea5e9', '#10b981', '#6366f1', '#facc15'];
+
+  // -----------------------------
+  // 3. UTILIZATION RATE
+  // -----------------------------
+  const idealSessions = 28;
+  const actualSessions = 22;
+  const utilization = Math.round((actualSessions / idealSessions) * 100);
+
+  // -----------------------------
+  // 4. CANCELLATIONS + NO SHOWS
+  // -----------------------------
+  const cancellations = 3;
+  const noShows = 1;
+
+  // -----------------------------
+  // 5. CLINICAL COMPLIANCE
+  // -----------------------------
+  const notesDue = 4;
+  const txPlansDue = 1;
+
+  // -----------------------------
+  // 6. WEEKLY SESSION TREND
+  // -----------------------------
+  const weeklySessions = [
+    { week: 'W1', sessions: 18 },
+    { week: 'W2', sessions: 22 },
+    { week: 'W3', sessions: 25 },
+    { week: 'W4', sessions: 21 },
+  
+    // -----------------------------
+// 7. EXPENSE PANEL DATA
+// -----------------------------
+const monthlyExpenses = [
+  { category: 'Software & Subscriptions', amount: 320 },
+  { category: 'Office & Supplies', amount: 140 },
+  { category: 'CEUs & Training', amount: 85 },
+  { category: 'Insurance (Liability/Health)', amount: 410 },
+  { category: 'Marketing & Listings', amount: 120 },
+  { category: 'Phone/Internet', amount: 165 },
+];
+
+const totalMonthlyExpenses = monthlyExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+// Weekly profit estimate
+const weeklyProfit = totalWeeklyRevenue - totalMonthlyExpenses / 4;
+
+// Expense trend (example data)
+const expenseTrend = [
+  { month: 'Nov', expenses: 1180 },
+  { month: 'Dec', expenses: 1240 },
+  { month: 'Jan', expenses: 1310 },
+  { month: 'Feb', expenses: 1210 },
+];
+  ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-black text-slate-900 tracking-tight italic uppercase">COO Command Suite</h2>
-          <p className="text-slate-500 text-xs font-medium">Real-time operational metrics for RuffStuff Counseling PLLC.</p>
-        </div>
-        {!isStandalone && (
-          <button 
-            onClick={() => setActiveTab('setup')}
-            className="flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-200 transition-all"
-          >
-            <Smartphone className="w-3.5 h-3.5" />
-            Enter Full App Mode
-          </button>
-        )}
+    <div className="space-y-8 animate-in fade-in duration-500">
+
+      {/* HEADER */}
+      <header>
+        <h2 className="text-2xl font-black text-slate-900 italic uppercase tracking-tight">
+          COO Command Dashboard
+        </h2>
+        <p className="text-slate-500">Operational intelligence for a multi‑platform practice.</p>
       </header>
 
-      {/* COMPACT STATS GRID */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MetricCard title="Active Clients" value="142" change={12} icon={Users} color="bg-blue-500" />
-        <MetricCard title="Pending Billing" value="$4,280" change={-5} icon={CreditCard} color="bg-orange-500" />
-        <MetricCard title="Clinician Logic" value="91%" change={8} icon={TrendingUp} color="bg-emerald-500" />
-        <MetricCard title="Active SOPs" value="28" change={2} icon={BookCheck} color="bg-purple-500" />
+      {/* METRIC CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        {/* Weekly Revenue */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">Weekly Revenue</h3>
+            <DollarSign className="w-5 h-5 text-orange-500" />
+          </div>
+          <p className="text-3xl font-black mt-2">${totalWeeklyRevenue}</p>
+          <p className="text-xs text-slate-400 mt-1">Projected across all platforms</p>
+        </div>
+
+        {/* Utilization */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">Utilization</h3>
+            <TrendingUp className="w-5 h-5 text-emerald-500" />
+          </div>
+          <p className="text-3xl font-black mt-2">{utilization}%</p>
+          <p className="text-xs text-slate-400 mt-1">{actualSessions} of {idealSessions} ideal sessions</p>
+        </div>
+
+        {/* Cancellations */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">Cancellations / No‑Shows</h3>
+            <AlertTriangle className="w-5 h-5 text-red-500" />
+          </div>
+          <p className="text-3xl font-black mt-2">{cancellations} / {noShows}</p>
+          <p className="text-xs text-slate-400 mt-1">Revenue leakage indicators</p>
+        </div>
+
+        {/* Compliance */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">Compliance</h3>
+            <Calendar className="w-5 h-5 text-blue-500" />
+          </div>
+          <p className="text-3xl font-black mt-2">{notesDue} notes • {txPlansDue} tx plans</p>
+          <p className="text-xs text-slate-400 mt-1">Outstanding clinical tasks</p>
+        </div>
+
       </div>
 
+      {/* PLATFORM MIX + WEEKLY TREND */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 min-w-0">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Tier 1 Performance</h3>
-            <div className="flex items-center gap-2">
-               <div className="flex items-center gap-1.5">
-                 <div className="w-2 h-2 rounded-full bg-blue-500" />
-                 <span className="text-[10px] font-bold text-slate-400">Sessions</span>
-               </div>
-               <div className="flex items-center gap-1.5 ml-2">
-                 <div className="w-2 h-2 rounded-full bg-orange-500" />
-                 <span className="text-[10px] font-bold text-slate-400">Billing</span>
-               </div>
-            </div>
-          </div>
-          <div className="h-64 w-full relative min-w-0">
-            <ResponsiveContainer width="100%" height="100%" minHeight={0}>
-              <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#64748b', fontWeight: 600}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#64748b', fontWeight: 600}} />
-                <Tooltip 
-                  cursor={{fill: '#f8fafc'}}
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontSize: '11px', fontWeight: 'bold' }}
-                />
-                <Bar dataKey="clients" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={24} />
-                <Bar dataKey="billing" fill="#f97316" radius={[4, 4, 0, 0]} barSize={24} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+{/* EXPENSE PANEL */}
+<div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+
+  <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest">
+    Monthly Expense Overview
+  </h3>
+
+  {/* Total Expenses + Profit */}
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <div>
+      <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Total Monthly Expenses</p>
+      <p className="text-3xl font-black mt-1">${totalMonthlyExpenses}</p>
+    </div>
+
+    <div>
+      <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Weekly Profit</p>
+      <p className="text-3xl font-black mt-1">${weeklyProfit.toFixed(0)}</p>
+      <p className="text-xs text-slate-400 mt-1">After prorated expenses</p>
+    </div>
+
+    <div>
+      <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Expense Ratio</p>
+      <p className="text-3xl font-black mt-1">
+        {Math.round((totalMonthlyExpenses / (totalWeeklyRevenue * 4)) * 100)}%
+      </p>
+      <p className="text-xs text-slate-400 mt-1">Of monthly revenue</p>
+    </div>
+
+  </div>
+
+  {/* Category Breakdown */}
+  <div>
+    <p className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Category Breakdown</p>
+    <ul className="space-y-2">
+      {monthlyExpenses.map((e, i) => (
+        <li key={i} className="flex justify-between text-sm">
+          <span className="font-medium text-slate-700">{e.category}</span>
+          <span className="font-bold text-slate-900">${e.amount}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Expense Trend Chart */}
+  <div className="mt-6">
+    <p className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Expense Trend</p>
+    <ResponsiveContainer width="100%" height={260}>
+      <LineChart data={expenseTrend}>
+        <XAxis dataKey="month" />
+        <YAxis />
+        <Tooltip />
+        <Line type="monotone" dataKey="expenses" stroke="#0ea5e9" strokeWidth={3} />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+</div>
+        {/* Platform Mix */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Platform Mix</h3>
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <Pie
+                data={platformMix}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={100}
+                label
+              >
+                {platformMix.map((entry, index) => (
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 min-w-0">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Efficiency Rating</h3>
-            <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md tracking-tighter">
-  Target: &gt;85%
-</span>
-          </div>
-          <div className="h-64 w-full relative min-w-0">
-            <ResponsiveContainer width="100%" height="100%" minHeight={0}>
-              <LineChart data={productivityData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#64748b', fontWeight: 600}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#64748b', fontWeight: 600}} />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontSize: '11px', fontWeight: 'bold' }}
-                />
-                <Line type="monotone" dataKey="efficiency" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, strokeWidth: 0 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+        {/* Weekly Sessions Trend */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Weekly Session Trend</h3>
+          <ResponsiveContainer width="100%" height={260}>
+            <LineChart data={weeklySessions}>
+              <XAxis dataKey="week" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="sessions" stroke="#f97316" strokeWidth={3} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
+
       </div>
 
-      <div className="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden border border-slate-800">
-        <div className="absolute top-0 right-0 p-8 opacity-5">
-          <Zap className="w-32 h-32" />
-        </div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-               <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-               <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Tiered Strategy Active</h4>
-            </div>
-            <h4 className="text-lg font-black italic tracking-tight">Protect the Backbone. Guard the Slivers.</h4>
-            <p className="text-xs text-slate-400 max-w-2xl leading-relaxed font-medium">
-              Prioritize <strong>Thriveworks Core</strong> (7AM-3PM). Strictly enforce <strong>Tier 2 Family Time</strong>. Deploy <strong>Headway</strong> for mid-day slivers (2-4 PM) and <strong>BetterHelp</strong> for late-night backfill (10 PM+).
-            </p>
-          </div>
-          <button 
-            onClick={() => setActiveTab('chat')}
-            className="w-full md:w-auto px-8 py-3 bg-orange-500 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-orange-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-orange-500/20"
-          >
-            Consult RuffBot <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

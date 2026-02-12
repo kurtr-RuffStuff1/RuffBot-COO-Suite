@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isCollapsed,
     { id: 'sop', label: 'SOP Vault', icon: BookOpen },
     { id: 'tools', label: 'Automation Tools', icon: PenTool },
     { id: 'calendar', label: 'Admin Calendar', icon: Calendar },
-    { id: 'setup', label: 'Deployment', icon: Smartphone },
+    { id: 'clients', label: 'Clients', icon: Users },
   ];
 
   return (

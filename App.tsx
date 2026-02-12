@@ -110,9 +110,9 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        <div className="max-w-[1600px] w-full mx-auto flex-1 flex flex-col">
-          {renderContent()}
-        </div>
+<div className="max-w-[1600px] w-full mx-auto flex-1 flex flex-col">
+  {renderContent()}
+</div>
 
         <footer className="mt-auto py-6 text-center">
           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] px-4">
