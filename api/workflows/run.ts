@@ -1,4 +1,5 @@
-import { getWorkflowById } from "./_registry";
+import { getWorkflowById } from "./_registry.js";
+
 
 function nowIso() {
   return new Date().toISOString();
