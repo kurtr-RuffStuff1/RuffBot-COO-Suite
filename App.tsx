@@ -9,6 +9,7 @@ import GrowthEngine from './components/GrowthEngine';
 import SchedulingOptimizer from './components/SchedulingOptimizer';
 import MobileSetup from './components/MobileSetup';
 import { Clock, Bell, Smartphone, X, ChevronRight, Share, Menu, Zap, ShieldCheck } from 'lucide-react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -148,6 +149,7 @@ const App: React.FC = () => {
           </p>
         </footer>
       </main>
+      <SpeedInsights />
     </div>
   );
 };
